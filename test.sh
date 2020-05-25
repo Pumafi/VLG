@@ -1,28 +1,40 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ $OSTYPE = "linux-gnu" ]
 then
         p='python3'
 else
-		p='python'
+	p='python'
 fi
 
+n_iteration=4
+
+echo
+echo
 echo Testing with inet, without reordering
-$p ./src/main.py ./data/inet noreorder
+$p ./src/main.py ./data/inet noreorder $n_iteration
 echo Testing with inet, reordering from root zero
-$p ./src/main.py ./data/inet zero
+$p ./src/main.py ./data/inet zero $n_iteration
+echo
+echo
 echo Testing with ip, without reordering
-$p ./src/main.py ./data/ip noreorder
+$p ./src/main.py ./data/ip noreorder $n_iteration
 echo Testing with ip, reordering from root zero
-$p ./src/main.py ./data/ip zero
+$p ./src/main.py ./data/ip zero $n_iteration
+echo
+echo
 echo Testing with p2p, without reordering
-$p ./src/main.py ./data/p2p noreorder
+$p ./src/main.py ./data/p2p noreorder $n_iteration
 echo Testing with p2p, reordering from root zero
-$p ./src/main.py ./data/p2p zero
+$p ./src/main.py ./data/p2p zero $n_iteration
+echo
+echo
 echo Testing with web, without reordering
-$p ./src/main.py ./data/web noreorder
+$p ./src/main.py ./data/web noreorder $n_iteration
 echo Testing with web, reordering from root zero
-$p ./src/main.py ./data/web zero
+$p ./src/main.py ./data/web zero $n_iteration
+echo
+echo
 
 
 #OTHER ROOT CHOICES
