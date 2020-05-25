@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+import os
 import igraph as ig
 import timeit
 
@@ -39,6 +40,16 @@ def get_bfs(g: ig.Graph, root: str = "zero", center = -1) -> list:
         vid = 0
         print("ERRROR: doublesweep root choice is not yet implemented.")
     return g.bfs(vid)[0]
+
+
+def save_result(filepath: str, modularity: float, clusters_nb: int, time):
+    # Save Result
+    try:
+        with open(filepath, 'a') as f:
+            f.writelines("{0}, {1}, {2}".format(modularity, clusters_nb, time))
+    except:
+        print("Could not save graph file \"" + filepath + "\"")
+        return
 
 
 def main() -> None:
@@ -81,15 +92,21 @@ def main() -> None:
     if root == "noreorder":
         start_time = timeit.default_timer()
         clusters = g.community_leiden(objective_function="modularity")
-        print("Elapsed time during Leiden algorithm:", timeit.default_timer() - start_time)
+        time = timeit.default_timer() - start_time
+        print("Elapsed time during Leiden algorithm:", time)
         print("Graph: modularity = {0}, number of clusters: {1}".format(clusters.modularity, len(clusters)))
+        save_result(filepath + root, clusters.modularity, len(clusters), time)
         exit(0)
+
+
 
     bfs = get_bfs(g, root, center)
     new_graph = g.permute_vertices(bfs)
     start_time = timeit.default_timer()
     new_clusters = new_graph.community_leiden(objective_function="modularity")
-    print("Elapsed time during Leiden algorithm:", timeit.default_timer() - start_time)
+    time = timeit.default_timer() - start_time
+    print("Elapsed time during Leiden algorithm:", time)
     print("Reord. graph: modularity = {0}, number of clusters: {1}".format(new_clusters.modularity, len(new_clusters)))
+    save_result(filepath + root, new_clusters.modularity, len(new_clusters), time)
 
 main()
