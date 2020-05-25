@@ -109,6 +109,7 @@ def main():
             with open(filepath) as f:
                 g = ig.Graph.Read_Edgelist(f, directed=False)
                 #g = ig.Graph.Read(f, format='edgelist')
+                print("Graph has", g.vcount(), "vertices and", g.ecount(), "edges.")
         except:
             print("Could not parse graph file \"" + filepath + "\"")
             exit(1)
