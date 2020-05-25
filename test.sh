@@ -1,9 +1,9 @@
 #!/bin/sh
 
 echo Testing with inet without reordering
-python3 ./src/main.py ./data/inet noreorder
+python ./src/main.py ./data/inet noreorder
 echo Testing with inet reordering from root zero
-python3 ./src/main.py ./data/inet zero
+python ./src/main.py ./data/inet zero
 #echo Testing with inet reordering from center 
 #python3 ./src/main.py ./data/inet center
 #echo Testing with inet reordering from root with mindegree
