@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import sys
 import igraph as ig
 import timeit
