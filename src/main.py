@@ -1,14 +1,13 @@
 import sys
 import igraph as ig
+import timeit
 
-DRAW = False
 
 def check_version_ig() -> int:
     if not ig.__version__.startswith("0.8"):
         print("Version of python-igraph superior to 0.80.0 required for Leiden Algorithm")
         return 0
     return 1
-
 
 def get_bfs(g: ig.Graph, root: str = "zero", center = -1) -> list:
     # TODO REOPTIMISER CA
@@ -40,18 +39,16 @@ def get_bfs(g: ig.Graph, root: str = "zero", center = -1) -> list:
     return g.bfs(vid)[0]
 
 
-def main():
+def main() -> None:
     check_version_ig()
 
-    # Read Graph
-    if len(sys.argv) < 3: #no args, random graph -> not anymore
-        #g = ig.Graph.GRG(1000, 0.1)
+    if len(sys.argv) < 3: #not enough args
         print("ERROR: need to specify graph and starting node for reordering.")
         print("Choices are: \"noreorder\", \"zero\", \"center\", \"mindegree\", \"maxdegree\", \"doublesweep\".")
         exit(1)
-    else: #using provided graph file path
+    else: #read graph using provided graph file path
 
-        #get parameters
+        #get CLI parameters
         filepath = sys.argv[1]
         if sys.argv[2] in ["noreorder", "zero", "center", "mindegree", "maxdegree", "doublesweep"]:
             root = sys.argv[2]
@@ -80,13 +77,17 @@ def main():
 
             # Apply Leiden algorithm
     if root == "noreorder":
+        start_time = timeit.default_timer()
         clusters = g.community_leiden(objective_function="modularity")
+        print("Elapsed time during Leiden algorithm:", timeit.default_timer() - start_time)
         print("Graph: modularity = {0}, number of clusters: {1}".format(clusters.modularity, len(clusters)))
         exit(0)
 
     bfs = get_bfs(g, root, center)
     new_graph = g.permute_vertices(bfs)
+    start_time = timeit.default_timer()
     new_clusters = new_graph.community_leiden(objective_function="modularity")
+    print("Elapsed time during Leiden algorithm:", timeit.default_timer() - start_time)
     print("Reord. graph: modularity = {0}, number of clusters: {1}".format(new_clusters.modularity, len(new_clusters)))
 
 main()
