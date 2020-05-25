@@ -19,29 +19,31 @@ def get_bfs(g: ig.Graph, root: str = "zero", center = -1) -> list:
         vid = 0
     elif root == 'center':
         if center == -1:
-            print("Error: no center provided with random graphs. Using node zero instead.")
+            print("Error: no center provided. Using node zero instead.")
             vid = 0
         else:
             vid = center
-    elif root == 'maxdegree':
-        max_d = g.maxdegree()
+    elif root == 'maxdegree': #look into dataframe for potentially better performances
+        max_d = 0
         for v in g.vs:
-            if v.degree() == max_d:
+            if v.degree() > max_d:
                 vid = v.index
-                break
-    elif root == 'mindegree':
-        min_d = g.mindegree()
+                max_d = v.degree()
+    elif root == 'mindegree': #same here
+        min_d = sys.maxsize
         for v in g.vs:
-            if v.degree() == min_d:
+            if v.degree() < min_d:
                 vid = v.index
-                break
-    elif root == 'doublesweep': #TODO
-        vid = 0
-        print("ERRROR: doublesweep root choice is not yet implemented.")
+                min_d = v.degree()
+    elif root == 'doublesweep':
+        extreme_1 = g.bfs(0)[0][-1]  #last element visited by bfs from node 0
+        #extreme_2 = g.bfs(extreme_1)[0][-1]  #we could add another iteration, not sure it's useful though
+        vid = extreme_1
     return g.bfs(vid)[0]
 
 
 def main() -> None:
+    main_start_time = timeit.default_timer()
     check_version_ig()
 
     if len(sys.argv) < 3: #not enough args
@@ -105,5 +107,7 @@ def main() -> None:
         new_clusters = new_graph.community_leiden(objective_function="modularity")
         print("Elapsed time during Leiden algorithm:", "{:.2f}".format(timeit.default_timer() - start_time))
         print("Graph: modularity = {0:.4f}, number of clusters: {1}".format(new_clusters.modularity, len(new_clusters)))
+
+    print("Total time for main function:", "{:.2f}".format(timeit.default_timer() - main_start_time))
 
 main()
