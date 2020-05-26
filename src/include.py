@@ -58,6 +58,9 @@ def save_result(filepath: str, modularity: float, clusters_nb: int, time):
 
 def read_metadata(filepath: str):
     try:
+        split_filepath = filepath.split("-")
+        if len(split_filepath) == 2:
+            filepath = split_filepath[0]
         with open(filepath + '.meta') as f:
             lines = f.readlines()
             node_count = int(lines[0])
