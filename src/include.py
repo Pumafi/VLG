@@ -1,7 +1,7 @@
 import sys
 import os
 import igraph as ig
-
+import numpy as np
 
 def check_version_ig() -> int:
     if not ig.__version__.startswith("0.8"):
@@ -39,10 +39,12 @@ def get_bfs(g: ig.Graph, root: str = "zero", center = -1) -> list:
 
 
 def permutation_from_bfs(bfs : list):
-    perm=[]
+    perm=np.empty(len(bfs))
+    print("started creating the permutation list from bfs list")
     for i in range(len(bfs)):
-        perm.insert(bfs[i], i)
-    return perm
+        perm.put(bfs[i], i)
+    print("finished creating the permutation list from bfs list")
+    return perm.tolist()
 
 
 def save_result(filepath: str, modularity: float, clusters_nb: int, time):

@@ -17,46 +17,45 @@ def main() -> None:
         print("Second argument: \"noreorder\" if not reordering, else the starting node for the BFS.")
         print("Choices are: \"noreorder\", \"zero\", \"center\", \"mindegree\", \"maxdegree\", \"doublesweep\".")
         print("Third argument (optional): number of iterations for benchmarking purposes.")
-        
         exit(1)
-    else: #read graph using provided graph file path
 
-        #get CLI parameters
-        filepath = sys.argv[1]
-        if sys.argv[2] in ["noreorder", "zero", "center", "mindegree", "maxdegree", "doublesweep"]:
-            root = sys.argv[2]
-        else:
-            print("Error: root", sys.argv[2], "not recognized.")
-            exit(1)
-        
-        n_iteration = 1
-        if len(sys.argv) == 4:
-            try:
-                n_iteration = int(sys.argv[3])
-                if n_iteration < 1:
-                    raise Exception
-            except:
-                print("Third parameter (number of iterations) should be a positive integer.")
-                exit(1)
-
+    #get CLI parameters
+    filepath = sys.argv[1]
+    if sys.argv[2] in ["noreorder", "zero", "center", "mindegree", "maxdegree", "doublesweep"]:
+        root = sys.argv[2]
+    else:
+        print("Error: root", sys.argv[2], "not recognized.")
+        exit(1)
+    
+    n_iteration = 1
+    if len(sys.argv) == 4:
         try:
-            with open(filepath) as f:
-                g = ig.Graph.Read_Edgelist(f, directed=False)
-                #g = ig.Graph.Read(f, format='edgelist')
-                print("Graph has", g.vcount(), "vertices and", g.ecount(), "edges.")
+            n_iteration = int(sys.argv[3])
+            if n_iteration < 1:
+                raise Exception
         except:
-            print("Could not parse graph file \"" + filepath + "\"")
+            print("Third parameter (number of iterations) should be a positive integer.")
             exit(1)
 
-        center = -1
-        if root == "center":
-            try:
-                with open(filepath + '.center') as f:
-                    center = int(f.readlines()[0])
-                    print("Center:", center)
-            except Exception as e:
-                print("No center file named \"" + filepath + ".center\" found.")
-                exit(1)
+    #read graph using provided graph file path
+    try:
+        with open(filepath) as f:
+            g = ig.Graph.Read_Edgelist(f, directed=False)
+            #g = ig.Graph.Read(f, format='edgelist')
+            print("Graph has", g.vcount(), "vertices and", g.ecount(), "edges.")
+    except:
+        print("Could not parse graph file \"" + filepath + "\"")
+        exit(1)
+
+    center = -1
+    if root == "center":
+        try:
+            with open(filepath + '.center') as f:
+                center = int(f.readlines()[0])
+                print("Center:", center)
+        except Exception as e:
+            print("No center file named \"" + filepath + ".center\" found.")
+            exit(1)
 
 
     # Reorder or not, then benchmark the Leiden algorithm
