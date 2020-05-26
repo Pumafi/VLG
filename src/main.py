@@ -46,7 +46,7 @@ def save_result(filepath: str, modularity: float, clusters_nb: int, time):
     # Save Result
     try:
         with open(filepath, 'a') as f:
-            f.writelines("{0}, {1}, {2}".format(modularity, clusters_nb, time))
+            f.writelines("{0}, {1}, {2}\n".format(modularity, clusters_nb, time))
     except:
         print("Could not save graph file \"" + filepath + "\"")
         return
@@ -56,8 +56,12 @@ def main() -> None:
     check_version_ig()
 
     if len(sys.argv) < 3: #not enough args
-        print("ERROR: need to specify graph and starting node for reordering.")
+        print("ERROR: need to specify graph and starting node for reordering (optionally, the number of iterations).")
+        print("First argument: path to graph file.")
+        print("Second argument: \"noreorder\" if not reordering, else the starting node for the BFS.")
         print("Choices are: \"noreorder\", \"zero\", \"center\", \"mindegree\", \"maxdegree\", \"doublesweep\".")
+        print("Third argument (optional): number of iterations for benchmarking purposes.")
+        
         exit(1)
     else: #read graph using provided graph file path
 
@@ -68,6 +72,16 @@ def main() -> None:
         else:
             print("Error: root", sys.argv[2], "not recognized.")
             exit(1)
+        
+        n_iteration = 1
+        if len(sys.argv) == 4:
+            try:
+                n_iteration = int(sys.argv[3])
+                if n_iteration < 1:
+                    raise Exception
+            except:
+                print("Third parameter (number of iterations) should be a positive integer.")
+                exit(1)
 
         try:
             with open(filepath) as f:
@@ -88,25 +102,22 @@ def main() -> None:
                 print("No center file named \"" + filepath + ".center\" found.")
                 exit(1)
 
-            # Apply Leiden algorithm
+
+    # Reorder or not, then benchmark the Leiden algorithm
+    
     if root == "noreorder":
+        new_graph = g
+    else:
+        bfs = get_bfs(g, root, center)
+        new_graph = g.permute_vertices(bfs)
+
+    for i in range(n_iteration):
         start_time = timeit.default_timer()
-        clusters = g.community_leiden(objective_function="modularity")
+        new_clusters = new_graph.community_leiden(objective_function="modularity")
         time = timeit.default_timer() - start_time
-        print("Elapsed time during Leiden algorithm:", time)
-        print("Graph: modularity = {0}, number of clusters: {1}".format(clusters.modularity, len(clusters)))
-        save_result(filepath + root, clusters.modularity, len(clusters), time)
-        exit(0)
+        print("Elapsed time during Leiden algorithm:", "{:.2f}".format(time))
+        print("Graph: modularity = {0:.4f}, number of clusters: {1}".format(new_clusters.modularity, len(new_clusters)))
+        save_result(filepath + "_" + root, new_clusters.modularity, len(new_clusters), time)
 
-
-
-    bfs = get_bfs(g, root, center)
-    new_graph = g.permute_vertices(bfs)
-    start_time = timeit.default_timer()
-    new_clusters = new_graph.community_leiden(objective_function="modularity")
-    time = timeit.default_timer() - start_time
-    print("Elapsed time during Leiden algorithm:", time)
-    print("Reord. graph: modularity = {0}, number of clusters: {1}".format(new_clusters.modularity, len(new_clusters)))
-    save_result(filepath + root, new_clusters.modularity, len(new_clusters), time)
 
 main()
