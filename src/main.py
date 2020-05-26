@@ -4,53 +4,7 @@ import sys
 import os
 import igraph as ig
 import timeit
-
-
-def check_version_ig() -> int:
-    if not ig.__version__.startswith("0.8"):
-        print("Version of python-igraph superior to 0.80.0 required for Leiden Algorithm")
-        return 0
-    return 1
-
-def get_bfs(g: ig.Graph, root: str = "zero", center = -1) -> list:
-    # TODO REOPTIMISER CA
-    # UTILISER ITER -> LOADING BAR -> PAS RECALCULER LES DEGRES A CHAQUE FOIS
-    # PARCOURIR QU'UNE FOIS possible ? nope
-    if root == 'zero':
-        vid = 0
-    elif root == 'center':
-        if center == -1:
-            print("Error: no center provided. Using node zero instead.")
-            vid = 0
-        else:
-            vid = center
-    elif root == 'maxdegree': #look into dataframe for potentially better performances
-        max_d = 0
-        for v in g.vs:
-            if v.degree() > max_d:
-                vid = v.index
-                max_d = v.degree()
-    elif root == 'mindegree': #same here
-        min_d = sys.maxsize
-        for v in g.vs:
-            if v.degree() < min_d:
-                vid = v.index
-                min_d = v.degree()
-    elif root == 'doublesweep':
-        extreme_1 = g.bfs(0)[0][-1]  #last element visited by bfs from node 0
-        #extreme_2 = g.bfs(extreme_1)[0][-1]  #we could add another iteration, not sure it's useful though
-        vid = extreme_1
-    return g.bfs(vid)[0]
-
-
-def save_result(filepath: str, modularity: float, clusters_nb: int, time):
-    # Save Result
-    try:
-        with open(filepath, 'a') as f:
-            f.writelines("{0}, {1}, {2}\n".format(modularity, clusters_nb, time))
-    except:
-        print("Could not save graph file \"" + filepath + "\"")
-        return
+from include import check_version_ig, get_bfs, permutation_from_bfs, save_result
 
 
 def main() -> None:
@@ -111,7 +65,7 @@ def main() -> None:
         new_graph = g
     else:
         bfs = get_bfs(g, root, center)
-        new_graph = g.permute_vertices(bfs)
+        new_graph = g.permute_vertices(permutation_from_bfs(bfs))
 
     for i in range(n_iteration):
         start_time = timeit.default_timer()
