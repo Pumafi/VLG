@@ -7,24 +7,24 @@ else
 	p='python'
 fi
 
+script='./src/main.py'
 n_iteration=1
 
-#for graph in './data/inet' './data/ip' './data/p2p' './data/web'
-for graph in './data/ip'
+for graph in './data/inet' './data/ip' './data/p2p' './data/web'
 do
     echo
     echo -----------------$graph-----------------
     echo '1) without reordering'
-    $p ./src/main.py $graph noreorder $n_iteration
+    $p $script $graph noreorder $n_iteration
     echo '2) reordering from root zero'
-    $p ./src/main.py $graph zero $n_iteration
+    $p $script $graph zero $n_iteration
     echo '3) reordering from center' 
-    $p ./src/main.py $graph center $n_iteration
+    $p $script $graph center $n_iteration
     echo '4) reordering from root with mindegree'
-    $p ./src/main.py $graph mindegree $n_iteration
+    $p $script $graph mindegree $n_iteration
     echo '5) reordering from root with maxdegree'
-    $p ./src/main.py $graph maxdegree $n_iteration
+    $p $script $graph maxdegree $n_iteration
     echo '6) reordering from extreme node found with doublesweep'
-    $p ./src/main.py $graph doublesweep $n_iteration
+    $p $script $graph doublesweep $n_iteration
     echo
 done

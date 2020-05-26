@@ -56,4 +56,17 @@ def save_result(filepath: str, modularity: float, clusters_nb: int, time):
         print("Could not save graph file \"" + filepath + "\"")
         return
 
+def read_metadata(filepath: str):
+    try:
+        with open(filepath + '.meta') as f:
+            lines = f.readlines()
+            node_count = int(lines[0])
+            try:
+                center = int(lines[1])
+            except:
+                center = -1
+    except Exception as e:
+        print("No correct metadata file named \"" + filepath + ".meta\" found.")
+        exit(1)
+    return node_count, center
 

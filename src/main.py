@@ -4,7 +4,7 @@ import sys
 import os
 import igraph as ig
 import timeit
-from include import check_version_ig, get_bfs, permutation_from_bfs, save_result
+from include import check_version_ig, get_bfs, permutation_from_bfs, save_result, read_metadata
 
 
 def main() -> None:
@@ -47,16 +47,13 @@ def main() -> None:
         print("Could not parse graph file \"" + filepath + "\"")
         exit(1)
 
-    center = -1
-    if root == "center":
-        try:
-            with open(filepath + '.center') as f:
-                center = int(f.readlines()[0])
-                print("Center:", center)
-        except Exception as e:
-            print("No center file named \"" + filepath + ".center\" found.")
-            exit(1)
-
+    n_nodes, center = read_metadata(filepath)
+    if center == -1 and root == "center":
+        print("Error: center not found in metadata.")
+        exit(1)
+    if n_nodes != g.vcount():
+        print("Error: node count in metadata doesn't match with observed node count.")
+        exit(1)
 
     # Reorder or not, then benchmark the Leiden algorithm
     
@@ -72,9 +69,9 @@ def main() -> None:
         time = timeit.default_timer() - start_time
         print("Elapsed time during Leiden algorithm:", "{:.2f}".format(time))
         print("Graph: modularity = {0:.4f}, number of clusters: {1}".format(new_clusters.modularity, len(new_clusters)))
-        save_result(filepath + "_" + root, new_clusters.modularity, len(new_clusters), time)
-
+        save_result("results/" + filepath + "_" + root, new_clusters.modularity, len(new_clusters), time)
 
     print("Total time for main function:", "{:.2f}".format(timeit.default_timer() - main_start_time))
+
 
 main()
