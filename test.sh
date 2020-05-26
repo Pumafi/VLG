@@ -7,43 +7,23 @@ else
 	p='python'
 fi
 
-n_iteration=4
+n_iteration=1
 
-echo
-echo
-echo Testing with inet, without reordering
-$p ./src/main.py ./data/inet noreorder $n_iteration
-echo Testing with inet, reordering from root zero
-$p ./src/main.py ./data/inet zero $n_iteration
-echo
-echo
-echo Testing with ip, without reordering
-$p ./src/main.py ./data/ip noreorder $n_iteration
-echo Testing with ip, reordering from root zero
-$p ./src/main.py ./data/ip zero $n_iteration
-echo
-echo
-echo Testing with p2p, without reordering
-$p ./src/main.py ./data/p2p noreorder $n_iteration
-echo Testing with p2p, reordering from root zero
-$p ./src/main.py ./data/p2p zero $n_iteration
-echo
-echo
-echo Testing with web, without reordering
-$p ./src/main.py ./data/web noreorder $n_iteration
-echo Testing with web, reordering from root zero
-$p ./src/main.py ./data/web zero $n_iteration
-echo
-echo
-
-
-#OTHER ROOT CHOICES
-
-#echo Testing with inet reordering from center 
-#$p ./src/main.py ./data/inet center
-#echo Testing with inet reordering from root with mindegree
-#$p ./src/main.py ./data/inet mindegree
-#echo Testing with inet reordering from root with maxdegree
-#$p ./src/main.py ./data/inet maxdegree
-#echo Testing with inet reordering from extreme root found with doublesweep
-#$p ./src/main.py ./data/inet doublesweep
+for graph in './data/inet' './data/ip' './data/p2p' './data/web'
+do
+    echo
+    echo -----------------$graph-----------------
+    echo '1) without reordering'
+    $p ./src/main.py $graph noreorder $n_iteration
+    echo '2) reordering from root zero'
+    $p ./src/main.py $graph zero $n_iteration
+    echo '3) reordering from center' 
+    $p ./src/main.py $graph center $n_iteration
+    echo '4) reordering from root with mindegree'
+    $p ./src/main.py $graph mindegree $n_iteration
+    echo '5) reordering from root with maxdegree'
+    $p ./src/main.py $graph maxdegree $n_iteration
+    echo '6) reordering from extreme node found with doublesweep'
+    $p ./src/main.py $graph doublesweep $n_iteration
+    echo
+done
