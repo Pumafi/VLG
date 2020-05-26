@@ -9,7 +9,8 @@ fi
 
 n_iteration=1
 
-for graph in './data/inet' './data/ip' './data/p2p' './data/web'
+#for graph in './data/inet' './data/ip' './data/p2p' './data/web'
+for graph in './data/ip'
 do
     echo
     echo -----------------$graph-----------------
