@@ -30,8 +30,7 @@ def main() -> None:
 
     n_nodes, _ = read_metadata(filepath)
     if n_nodes != g.vcount():
-        print("Error: node count in metadata doesn't match with observed node count. Maybe this graph has already been sanitized?")
-        exit(1)
+        print("Warning: node count in metadata doesn't match with observed node count. Maybe this graph has already been sanitized?")
 
     #inform on number of nodes with degree 0
     vdz = 0
@@ -58,12 +57,13 @@ def main() -> None:
     # here they are
     component_clustering = g.components()
     components = component_clustering.subgraphs()
-    print("Found strong components with the following node counts:")
-    print([c.vcount() for c in components])
+    print("Found", len(components), "components.")
+    #print("Found strong components with the following node counts:")
+    #print([c.vcount() for c in components])
     g = component_clustering.giant()
 
 
-    g.save(filepath + "-SANITIZED", format="edgelist")
+    g.save(filepath + "-sanitized", format="edgelist")
     print("The sanitized graph's node count is",
             str(g.vcount()) + ", please update the metadata file accordingly.") 
 

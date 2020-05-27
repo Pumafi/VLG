@@ -1,3 +1,4 @@
+data/*
 data/inet
 data/ip
 data/p2p
@@ -6,6 +7,11 @@ data/inet-*
 data/ip-*
 data/p2p-*
 data/web-*
+data/inet.meta
+data/ip.meta
+data/p2p.meta
+data/web.meta
+data/other/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

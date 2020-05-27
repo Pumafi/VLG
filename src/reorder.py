@@ -41,8 +41,7 @@ def main() -> None:
         print("Error: center not found in metadata.")
         exit(1)
     if n_nodes != g.vcount():
-        print("Error: node count in metadata doesn't match with observed node count.")
-        exit(1)
+        print("Warning: node count in metadata doesn't match with observed node count.")
 
     #reorder and save 
     bfs = get_bfs(g, root, center)
