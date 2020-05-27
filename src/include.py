@@ -32,9 +32,12 @@ def get_bfs(g: ig.Graph, root: str = "zero", center = -1) -> list:
                 vid = v.index
                 min_d = v.degree()
     elif root == 'doublesweep':
-        extreme_1 = g.bfs(0)[0][-1]  #last element visited by bfs from node 0
-        #extreme_2 = g.bfs(extreme_1)[0][-1]  #we could add another iteration, not sure it's useful though
+        extreme_1 = g.bfs(0)[0][-1]  #last node visited by bfs from node 0
         vid = extreme_1
+    elif root == 'triplesweep':
+        extreme_1 = g.bfs(0)[0][-1]  #last node visited by bfs from node 0
+        extreme_2 = g.bfs(extreme_1)[0][-1]  #again from previous last node
+        vid = extreme_2
     return g.bfs(vid)[0]
 
 

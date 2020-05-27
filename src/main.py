@@ -15,13 +15,13 @@ def main() -> None:
         print("ERROR: need to specify graph and starting node for reordering (optionally, the number of iterations).")
         print("First argument: path to graph file.")
         print("Second argument: \"noreorder\" if not reordering, else the starting node for the BFS.")
-        print("Choices are: \"noreorder\", \"zero\", \"center\", \"mindegree\", \"maxdegree\", \"doublesweep\".")
+        print("Choices are: \"noreorder\", \"zero\", \"center\", \"mindegree\", \"maxdegree\", \"doublesweep\", \"triplesweep\".")
         print("Third argument (optional): number of iterations for benchmarking purposes.")
         exit(1)
 
     #get CLI parameters
     filepath = sys.argv[1]
-    if sys.argv[2] in ["noreorder", "zero", "center", "mindegree", "maxdegree", "doublesweep"]:
+    if sys.argv[2] in ["noreorder", "zero", "center", "mindegree", "maxdegree", "doublesweep", "triplesweep"]:
         root = sys.argv[2]
     else:
         print("Error: root", sys.argv[2], "not recognized.")

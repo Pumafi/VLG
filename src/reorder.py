@@ -15,14 +15,14 @@ def main() -> None:
         print("ERROR: need to specify graph and starting node for reordering.")
         print("First argument: path to graph file.")
         print("Second argument: the starting node for the BFS.")
-        print("Choices are: \"zero\", \"center\", \"mindegree\", \"maxdegree\", \"doublesweep\".")
+        print("Choices are: \"zero\", \"center\", \"mindegree\", \"maxdegree\", \"doublesweep\", \"triplesweep\".")
         
         exit(1)
     else: #read graph using provided graph file path
 
         #get CLI parameters
         filepath = sys.argv[1]
-        if sys.argv[2] in ["zero", "center", "mindegree", "maxdegree", "doublesweep"]:
+        if sys.argv[2] in ["zero", "center", "mindegree", "maxdegree", "doublesweep", "triplesweep"]:
             root = sys.argv[2]
         else:
             print("Error: root", sys.argv[2], "not recognized.")
