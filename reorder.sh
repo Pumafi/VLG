@@ -7,10 +7,9 @@ else
 	p='python'
 fi
 
-n_iteration=1
 script='./src/reorder.py'
 
-for graph in './data/inet' #'./data/ip' './data/p2p' './data/web'
+for graph in './data/inet' './data/ip' './data/p2p' './data/web'
 do
     echo
     echo -----------------$graph-----------------
@@ -24,5 +23,7 @@ do
     $p $script $graph maxdegree 
     echo '5) reordering from extreme node found with doublesweep'
     $p $script $graph doublesweep 
+    echo '6) reordering from extreme node found with triplesweep'
+    $p $script $graph triplesweep 
     echo
 done

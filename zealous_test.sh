@@ -26,5 +26,7 @@ do
     $p $script $graph maxdegree $n_iteration
     echo '6) reordering from extreme node found with doublesweep'
     $p $script $graph doublesweep $n_iteration
+    echo '7) reordering from extreme node found with triplesweep'
+    $p $script $graph triplesweep $n_iteration
     echo
 done

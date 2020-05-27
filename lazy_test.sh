@@ -8,9 +8,9 @@ else
 fi
 
 script='./src/main.py'
-n_iteration=1
+n_iteration=5
 
-for graph in './data/inet' #'./data/ip' './data/p2p' './data/web'
+for graph in './data/inet' './data/ip' './data/p2p' './data/web'
 do
     echo
     echo -----------------$graph-----------------
@@ -26,5 +26,7 @@ do
     $p $script $graph-maxdegree noreorder $n_iteration
     echo '6) with graph reordered from extreme node found with doublesweep'
     $p $script $graph-doublesweep noreorder $n_iteration
+    echo '7) with graph reordered from extreme node found with triplesweep'
+    $p $script $graph-triplesweep noreorder $n_iteration
     echo
 done
