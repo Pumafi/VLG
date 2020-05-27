@@ -32,13 +32,14 @@ def main() -> None:
     if n_nodes != g.vcount():
         print("Warning: node count in metadata doesn't match with observed node count. Maybe this graph has already been sanitized?")
 
+    """
     #inform on number of nodes with degree 0
     vdz = 0
     for v in g.vs():
         if v.degree() == 0:
             vdz += 1
     print("There are", vdz, "nodes with degree 0.")
-
+    """
 
     # wanted to compute the giant connected component, but there are functions for that
     """
@@ -55,13 +56,13 @@ def main() -> None:
         components = []
     """ 
     # here they are
-    component_clustering = g.components()
-    components = component_clustering.subgraphs()
-    print("Found", len(components), "components.")
+    #component_clustering = g.components()
+    #components = component_clustering.subgraphs()
+    #print("Found", len(components), "components.")
     #print("Found strong components with the following node counts:")
     #print([c.vcount() for c in components])
-    g = component_clustering.giant()
-
+    #g = component_clustering.giant()
+    g = g.components.giant()
 
     g.save(filepath + "-sanitized", format="edgelist")
     print("The sanitized graph's node count is",
