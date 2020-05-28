@@ -2,9 +2,9 @@
 
 import sys
 import os
+import gc
 import igraph as ig
 import timeit
-import numpy as np
 from include import check_version_ig, get_bfs, permutation_from_bfs, read_metadata
 
 
@@ -28,9 +28,11 @@ def main() -> None:
             print("Could not parse graph file \"" + filepath + "\"")
             exit(1)
 
+    """
     n_nodes, _ = read_metadata(filepath)
     if n_nodes != g.vcount():
         print("Warning: node count in metadata doesn't match with observed node count. Maybe this graph has already been sanitized?")
+    """
 
     """
     #inform on number of nodes with degree 0
@@ -62,12 +64,18 @@ def main() -> None:
     #print("Found strong components with the following node counts:")
     #print([c.vcount() for c in components])
     #g = component_clustering.giant()
-    g = g.components.giant()
+
+    components = g.components()
+    del g
+    gc.collect()
+    g = components.giant()
+    del components
+    gc.collect()
 
     g.save(filepath + "-sanitized", format="edgelist")
-    print("The sanitized graph's node count is",
-            str(g.vcount()) + ", please update the metadata file accordingly.") 
+    #print("The sanitized graph's node count is",
+    #        str(g.vcount()) + ", please update the metadata file accordingly.") 
 
-    print("Total time for sanitize.py:", "{:.2f}".format(timeit.default_timer() - main_start_time))
+    #print("Total time for sanitize.py:", "{:.2f}".format(timeit.default_timer() - main_start_time))
 
 main()
