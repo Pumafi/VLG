@@ -63,13 +63,26 @@ def main() -> None:
         bfs = get_bfs(g, root, center)
         new_graph = g.permute_vertices(permutation_from_bfs(bfs))
 
-    for i in range(n_iteration):
-        start_time = timeit.default_timer()
-        new_clusters = new_graph.community_leiden(objective_function="modularity")
-        time = timeit.default_timer() - start_time
-        print("Elapsed time during Leiden algorithm:", "{:.2f}".format(time))
-        print("Graph: modularity = {0:.4f}, number of clusters: {1}".format(new_clusters.modularity, len(new_clusters)))
-        save_result("results/" + filepath + "_" + root, new_clusters.modularity, len(new_clusters), time)
+    fail_count = 0
+    max_fails_allowed = max(2, n_iteration // 5)  # abort if at least 20% of the expected iterations failed
+    # minimum set at 2 to balance higher variance on smaller iteration numbers (would otherwise abort at first fail if n < 10)
+    i = 0
+    while i < n_iteration: # not sensitive to a few crashes thanks to this new loop
+        try:
+            start_time = timeit.default_timer()
+            new_clusters = new_graph.community_leiden(objective_function="modularity")
+            time = timeit.default_timer() - start_time
+            print("Elapsed time during Leiden algorithm:", "{:.2f}".format(time))
+            print("Graph: modularity = {0:.4f}, number of clusters: {1}".format(new_clusters.modularity, len(new_clusters)))
+            save_result("results/" + filepath + "_" + root, new_clusters.modularity, len(new_clusters), time)
+            i += 1
+        except Exception as e:
+            print("Failed at iteration", i+1)
+            print("Exception was:")
+            print(e)
+            fail_count += 1
+            if fail_count >= max_fails_allowed:
+                print("Failed", max_fails_allowed, "times with this test. Aborting.")
 
     print("Total time for main function:", "{:.2f}".format(timeit.default_timer() - main_start_time))
 
