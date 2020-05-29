@@ -4,6 +4,7 @@ import sys
 from math import sqrt
 # I should use numpy but alas I'm stupid
 
+PRINT_COLUMNS = [0, 1, 2]
 COLUMN_NAMES=["modularity", "cluster", "time"]
 PRINT=True
 
@@ -47,7 +48,8 @@ def main() -> None:
         for i in range(height):  # rows (thus for each value in column)
             sum_values += lines[i][j]
         mean = sum_values / height
-        log("Mean for column " + COLUMN_NAMES[j] + ":", mean)
+        if j in PRINT_COLUMNS:
+            log("Mean for column " + COLUMN_NAMES[j] + ":", mean)
         means.append(mean)
 
     # computing standard deviation for each column
@@ -58,7 +60,8 @@ def main() -> None:
             difference = lines[i][j] - means[j]
             sum_squared_differences += difference ** 2
         stdev = sqrt(sum_squared_differences / height)
-        log("Standard deviation for column " + COLUMN_NAMES[j] + ": ", stdev)
+        if j in PRINT_COLUMNS:
+            log("Standard deviation for column " + COLUMN_NAMES[j] + ": ", stdev)
         stdevs.append(stdev)
        
 main()
