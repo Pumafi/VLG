@@ -8,7 +8,7 @@ import seaborn as sns
 
 def main() -> None:
     if len(sys.argv) < 2:
-        print("Please indicate a result file.")
+        print("Please indicate a result folder.")
         exit(1)
 
     folderpath = sys.argv[1]
@@ -30,22 +30,14 @@ def main() -> None:
     colors = ["red", "green", "yellow", "pink", "blue", "orange", "black"]
     legend = dict(zip(reordering, colors))
 
-    for i in range(len(reordering)):
-        modularities = all_graphs_lines[i, :, 0]
-        clusters_nb = all_graphs_lines[i, :, 1]
-        times = all_graphs_lines[i, :, 2]
-        plt.subplot(3, 1, 1)
-        plt.xlabel("Running time")
-        sns.distplot(times, hist=False, rug=True, color=colors[i])
-        plt.subplot(3, 1, 2)
-        plt.xlabel("Number of clusters")
-        sns.distplot(clusters_nb, hist=False, rug=True, color=colors[i])
-        plt.subplot(3, 1, 3)
-        plt.xlabel("Modularity")
-        sns.distplot(modularities, hist=False, rug=True, color=colors[i])
-
-    plt.legend(legend)
-    plt.show()
+    data_type_labels = ["Modularity", "Number of clusters", "Running time"]
+    for data_type_idx in range(len(data_type_labels)):    
+        for i in range(len(reordering)):
+            data = all_graphs_lines[i, :, data_type_idx]
+            plt.xlabel(data_type_labels[data_type_idx])
+            sns.distplot(data, hist=False, rug=True, color=colors[i])
+        plt.legend(legend)
+        plt.show()
 
 
 main()
