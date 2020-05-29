@@ -34,7 +34,15 @@ def main() -> None:
         modularities = all_graphs_lines[i, :, 0]
         clusters_nb = all_graphs_lines[i, :, 1]
         times = all_graphs_lines[i, :, 2]
+        plt.subplot(3, 1, 1)
+        plt.xlabel("Running time")
         sns.distplot(times, hist=False, rug=True, color=colors[i])
+        plt.subplot(3, 1, 2)
+        plt.xlabel("Number of clusters")
+        sns.distplot(clusters_nb, hist=False, rug=True, color=colors[i])
+        plt.subplot(3, 1, 3)
+        plt.xlabel("Modularity")
+        sns.distplot(modularities, hist=False, rug=True, color=colors[i])
 
     plt.legend(legend)
     plt.show()
