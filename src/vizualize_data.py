@@ -6,8 +6,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import scipy.stats
 
-SHOW_STD_DEV = ["Running time"]
-SKIP_SHUFFLED = False
+
+SKIP_SHUFFLED = True
+#SKIP_SHUFFLED = False
 
 
 class style:
@@ -44,7 +45,7 @@ def main() -> None:
         exit(1)
 
     folderpath = sys.argv[1]
-    graphs_filespaths = [os.path.join(folderpath, file) for file in os.listdir(folderpath)]
+    graphs_filespaths = sorted([os.path.join(folderpath, file) for file in os.listdir(folderpath)])
     all_graphs_lines = []
     reordering = []
     kept_as_last = None
@@ -56,15 +57,7 @@ def main() -> None:
                 kept_as_last = filepath
         else: 
             read_result_file(filepath, all_graphs_lines, reordering)
-        """
-        with open(filepath) as f:
-            lines = f.readlines()
-            if len(lines) < 1:
-                print("Error: no lines in file.")
-                exit(1)
-            all_graphs_lines.append([[float(value) for value in line.split(", ")] for line in lines])
-            reordering.append(filepath.split("/")[-1].split("_")[0])
-        """
+        
     if kept_as_last:
         read_result_file(kept_as_last, all_graphs_lines, reordering)
 
@@ -93,13 +86,15 @@ def main() -> None:
             print("Sample count:", data.size)
             print("Mean:", mean)
             print("Standard deviation:", np.std(data))
-            if data_type_labels[data_type_idx] in SHOW_STD_DEV:
-                min95, max95 = mean_confidence_interval(data)
-                plt.plot([mean, mean], [0, 1 + i/graph_count], color=colors[i])
-                plt.fill_betweenx([0, 1 + i/graph_count], min95, max95, color=colors[i], alpha=.3)
-        if data_type_labels[data_type_idx] in SHOW_STD_DEV:
-            plt.legend(legend)
-            plt.show()
+            min95, max95 = mean_confidence_interval(data, 0.95)
+            reversed_i = graph_count - i - 1
+            plt.plot([mean, mean], [0, 1 + reversed_i/graph_count], color=colors[i])
+            plt.fill_betweenx([0, 1 + reversed_i/graph_count], min95, max95, color=colors[i], alpha=.5)
+
+        plt.xlabel("Confidence intervals (at confidence level 95%) for mean " + data_type_labels[data_type_idx])
+        plt.ylabel("No meaning")
+        plt.legend(legend)
+        plt.show()
         
     
 main()

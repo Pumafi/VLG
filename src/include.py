@@ -2,6 +2,7 @@ import sys
 import os
 import igraph as ig
 import numpy as np
+from random import randint
 
 def check_version_ig() -> int:
     if not ig.__version__.startswith("0.8"):
@@ -38,6 +39,8 @@ def get_bfs(g: ig.Graph, root: str = "zero", center = -1) -> list:
         extreme_1 = g.bfs(0)[0][-1]  #last node visited by bfs from node 0
         extreme_2 = g.bfs(extreme_1)[0][-1]  #again from previous last node
         vid = extreme_2
+    elif root == 'random':
+        vid = randint(0, g.vcount() - 1)
     return g.bfs(vid)[0]
 
 

@@ -21,7 +21,7 @@ def main() -> None:
 
     #get CLI parameters
     filepath = sys.argv[1]
-    if sys.argv[2] in ["noreorder", "zero", "center", "mindegree", "maxdegree", "doublesweep", "triplesweep"]:
+    if sys.argv[2] in ["noreorder", "zero", "center", "mindegree", "maxdegree", "doublesweep", "triplesweep", "random"]:
         root = sys.argv[2]
     else:
         print("Error: root", sys.argv[2], "not recognized.")
@@ -60,8 +60,11 @@ def main() -> None:
     if root == "noreorder":
         new_graph = g
     else:
+        st = timeit.default_timer()
         bfs = get_bfs(g, root, center)
         new_graph = g.permute_vertices(permutation_from_bfs(bfs))
+        t = timeit.default_timer() - st
+        #print("Reordering time:", t)
 
     fail_count = 0
     max_fails_allowed = max(2, n_iteration // 5)  # abort if at least 20% of the expected iterations failed
