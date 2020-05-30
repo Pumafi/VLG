@@ -7,8 +7,8 @@ import seaborn as sns
 import scipy.stats
 
 
-SKIP_SHUFFLED = True
-#SKIP_SHUFFLED = False
+#SKIP_SHUFFLED = True
+SKIP_SHUFFLED = False
 
 
 class style:
@@ -65,7 +65,7 @@ def main() -> None:
 
     #print(all_graphs_lines.shape)
     graph_count = len(reordering)
-    colors = ["red", "green", "yellow", "pink", "blue", "orange", "black"]
+    colors = ["blue", "green", "red", "yellow", "pink", "lime", "cyan", "black"]
     legend = dict(zip(reordering, colors))
     data_type_labels = ["Modularity", "Number of clusters", "Running time"]
 

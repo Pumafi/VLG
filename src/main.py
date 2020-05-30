@@ -4,6 +4,7 @@ import sys
 import os
 import igraph as ig
 import timeit
+import gc
 from include import check_version_ig, get_bfs, permutation_from_bfs, save_result, read_metadata
 
 
@@ -65,6 +66,9 @@ def main() -> None:
         new_graph = g.permute_vertices(permutation_from_bfs(bfs))
         t = timeit.default_timer() - st
         #print("Reordering time:", t)
+
+    del g
+    gc.collect()
 
     fail_count = 0
     max_fails_allowed = max(2, n_iteration // 5)  # abort if at least 20% of the expected iterations failed
