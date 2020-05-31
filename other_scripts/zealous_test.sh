@@ -29,6 +29,6 @@ do
     echo '7) reordering from extreme node found with triplesweep'
     #$p $script $graph triplesweep $n_iteration
     echo '8) reordering from random'
-    $p $script $graph random $n_iteration
+    $p $script $graph random $n_iteration   #this is the only valid reason to use the zealous test, reordering each time main.py is called
     echo
 done
