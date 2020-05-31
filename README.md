@@ -12,9 +12,10 @@ For each graph, you should have a .meta file containing:
         -> Example: for a graph originally named inet.gz, this file should be called inet.meta
 For each of them, run from the root of the Git repository: ./process data/inet  (in this example, with inet.gz)
     -> DO NOT run: ./process data/inet.gz
+(during this process, if you get a warning during the shuffling process, don't mind it; it's because you couldn't change the values in the .meta file between the sanitizing and the shuffling)
 When it's done, you need to update the inet.meta file:
-    - the graph now has less node, since it's now only composed of its giant connected component
-    - the center has a new index after shuffling
+    - the graph now has less node, since it's now only composed of its giant connected component (this is printed during the sanitizing process)
+    - the center has a new index after shuffling (this is printed during the shuffling process)
 Now, for each graph, run: ./reorder.sh data/inet
 Finally, you can run: ./lazy_test.sh
 
