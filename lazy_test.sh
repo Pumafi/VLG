@@ -10,7 +10,7 @@ fi
 script='./src/main.py'
 n_iteration=5
 
-for graph in './data/inet' './data/ip' './data/p2p' './data/web'
+for graph in './data/inet' './data/ip' './data/p2p'
 do
     echo
     echo -----------------$graph-----------------
