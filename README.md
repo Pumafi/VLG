@@ -5,7 +5,7 @@ The final report is "report.pdf"
 
 Graphs and Data come from: http://data.complexnetworks.fr/Diameter/
 
-###SETUP
+### SETUP
 Go to: http://data.complexnetworks.fr/Diameter/
 Download any number of those graphs
 Don't extract the .gz files
@@ -24,12 +24,12 @@ Now, for each graph, run: ./reorder.sh data/inet
 Finally, you can run: ./lazy_test.sh
 
 
-###RESULTS
+### RESULTS
 Please note: for a graph "graphname" and a reordering method "methodname",
 "graphname_noreorder" is the shuffled graph and
 "graphname-methodname_noreorder" is the graph reordered with the method "methodname".
 This is due to the facts that the Python script running the Leiden algorithm has the ability to reorder
 the input graph itself, but we use it with already reordered graphs (for performance reasons).
 
-###VIZUALISATION
+### VIZUALISATION
 You can use vizualize.sh to compute and see the plots for graphs inet and ip. You can also use ./compute_all_stats.sh to see the corresponding numbers.
