@@ -1,5 +1,9 @@
-# VLG
+# VLG (Very Large Graphs)
 
+This project is a two persons analysis of the consequences of reordering on Community algorithms (Leiden Algorithm: https://www.nature.com/articles/s41598-019-41695-z).
+The final report is "report.pdf"
+
+Graphs and Data come from: http://data.complexnetworks.fr/Diameter/
 
 ###SETUP
 Go to: http://data.complexnetworks.fr/Diameter/
